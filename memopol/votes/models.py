@@ -1,7 +1,8 @@
 # -*- coding:Utf-8 -*-
 import json
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Sum
+from django.template.defaultfilters import floatformat
 
 from .utils import clean_all_trends
 from memopol.reps.models import Representative
@@ -59,12 +60,15 @@ class Proposal(models.Model):
     def mps(self):
         return MP.objects.filter(vote__recommendation__proposal=self).distinct()
 
+    @property
+    def total_score(self):
+        return self.ponderation * 10
+
     def __unicode__(self):
         return self.title
 
     class Meta:
         ordering = ('-_date', )
-
 
 class Recommendation(models.Model):
     datetime = models.DateTimeField()
@@ -120,6 +124,13 @@ class Recommendation(models.Model):
     def abstent_count(self):
         return self._get_cached_count('abstent')
 
+    @reify
+    def max_score(self):
+        if self.weight:
+            return float(self.weight) * self.proposal.total_score / Recommendation.objects.filter(proposal=self.proposal).aggregate(Sum('weight'))['weight__sum']
+        else:
+            return None
+
     def __unicode__(self):
         return self.subject
 
@@ -131,6 +142,7 @@ class Vote(models.Model):
     name = models.CharField(max_length=127)
     recommendation = models.ForeignKey(Recommendation)
     representative = models.ForeignKey(Representative, null=True)
+    _score = models.CharField(max_length=10, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # if I'm modifyed and not created
@@ -141,12 +153,36 @@ class Vote(models.Model):
     class Meta:
         ordering = ["choice"]
 
+    @property
+    def score(self):
+        if not self._score is None:
+            return self._score
+
+        if self.recommendation.max_score is None:
+            self._score = ""
+            self.save()
+            return self._score
+
+        if self.choice in ('for', 'against'):
+            if self.recommendation.recommendation == self.choice:
+                self._score = "+%s" % floatformat(self.recommendation.max_score)
+            elif self.recommendation.recommendation != self.choice:
+                self._score = "-%s" % floatformat(self.recommendation.max_score)
+        else:  # absent, abstention
+            if self.recommendation.recommendation == "against":
+                self._score = "+%s" % (floatformat(self.recommendation.max_score / 2))
+            else:
+                self._score =  "-%s" % (floatformat(self.recommendation.max_score / 2))
+
+        self.save()
+        return self._score
+
     def __unicode__(self):
         return '%s (%s)' % (self.name, self.choice)
 
 
 class Score(models.Model):
-    value = models.FloatField()
+    value = models.IntegerField()
     representative = models.ForeignKey(Representative)
     proposal = models.ForeignKey(Proposal)
     date = models.DateField()
