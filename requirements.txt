@@ -1,4 +1,4 @@
-Django
+Django>=1.4
 South==0.7.3
 git+git://github.com/joymax/django-debug-toolbar.git
 numpy==1.5.1
