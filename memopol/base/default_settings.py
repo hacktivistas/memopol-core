@@ -54,6 +54,9 @@ INSTALLED_APPS = (
     'categories.editor',
     'endless_pagination',
     'compressor',
+    'snippets',
+    'extended_choices',
+    'matplotlib',
 )
 STATICFILES_FINDERS += (
     "compressor.finders.CompressorFinder",
