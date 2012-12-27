@@ -5,11 +5,11 @@ Introduction
 ============
 
 The Political Memory is a tool build by [la Quadrature du Net](http://lqdn.fr).
-It follow several objectives: being a campaign tool, being able to display how
+It follows several objectives: being a campaign tool, being able to display how
 well the elected representatives have followed the voting recommendations of la
-Quadrature du Net, increase the political cost of the decisions of elected
-representatives, gather official positions taken by elected representatives
-and, the most important one, inform citizens.
+Quadrature du Net, increasing the political cost of the decisions of elected
+representatives, gathering official positions taken by elected representatives
+and, the most important one, informing citizens.
 
 This is the second version of the tool.
 
@@ -19,10 +19,10 @@ Links
 * [code](http://gitorious.org/memopol2-0) (and there is also a mirror on [github](https://github.com/Psycojoker/memopol2))
 * [official la Quadrature du Net's instance](https://memopol.lqdn.fr)
 * [Bug tracker](https://projets.lqdn.fr/projects/mempol)
-* [dev blog](http://memopol.org)
-* [mailing list](http://laquadrature.net/cgi-bin/mailman/listinfo/mempol2)
+* [dev blog](http://www.memopol.org)
+* [mailing list](http://www.laquadrature.net/cgi-bin/mailman/listinfo/mempol2)
 
-We also have an irc channel: irc.freenode.net#lqdn-memopol (english speaking but if you only know french we can deal with that) where you will be very welcome
+We also have an IRC channel: irc.freenode.net#lqdn-memopol (English speaking but if you only know French we can deal with that) where you will be very welcome.
 
 How to contribute
 =================
@@ -32,7 +32,7 @@ Like in any free software project:
 * clone it
 * install it
 * code
-* optional: talk to us about it on irc or on the mailing list
+* optional: talk to us about it on IRC or on the mailing list
 * send a pull request either on [gitorious](http://gitorious.org/memopol2-0) or [github](https://github.com/Psycojoker/memopol2)
 * hit us with a stick if we don't react (shouldn't happen)
 * we merge your code, everyone is happy
@@ -115,7 +115,7 @@ Run the server
 Your application is available on http://localhost:8000/
 
 And you're done, but you might want to take a look at the next section
-depanding on what you want to dev.
+depending on what you want to dev.
 
 Updating memopol's data
 =======================
@@ -136,24 +136,24 @@ First, you have to get all the votes data by running this command:
 
     python manage.py import_ep_votes_data
 
-If you want to update the available importables votes, just re-run this
+If you want to update the available importable votes, just re-run this
 command.
 
-Then you need chose a vote on which you want to create a recommendation. For
-this: got to `/votes/import/` on your instance (for example:
+Then you need to choose a vote on which you want to create a recommendation. For
+this: go to `/votes/import/` on your instance (for example:
 http://mempol2.serverside.fr/votes/import/). There, you'll see the list of the
-importable votes (with not very user friendly name, those are the one given by
-the European Parliament). Chose a vote, click on it, grab it's "ID" as
+importable votes (with not very user-friendly names, those are the ones given by
+the European Parliament). Choose a vote, click on it, grab it's "ID" as
 specified on his page, then run:
 
-    python manage.py create_voting_recommandation <vote id> <{for,against}> <weight of the recommendation> <weight of the proposal, 1 by default>
+    python manage.py create_voting_recommendation <vote id> <{for,against}> <weight of the recommendation> <weight of the proposal, 1 by default>
 
 Where: the `vote id` is the idea you have chosen, `for` or `against` is your
 voting recommendation, `weight of the recommendations` is the weight you want
-to give to the recommendation (for exemple: the weight of the final vote is way
+to give to the recommendation (for example: the weight of the final vote is way
 more important than the one of a small amendment) and weight of the proposal is
 the weight of the total vote (for example: the vote on ACTA is way more
-important than the Lambrinidis rapport for la Quadrature du Net).
+important than the Lambrinidis report for la Quadrature du Net).
 
 Example:
 
@@ -190,7 +190,7 @@ command is ready for you:
     python manage.py remove_lqdn_data
 
 This will remove everything related to the votes that we are tracking and the
-opinions. More customisability will appears in the future and better doc on how
+opinions. More customisability will appear in the future and better doc on how
 to use the cli tools.
 
 Small lexicon
@@ -199,10 +199,10 @@ Small lexicon
 We try not to use it too much but you'll eventually end up on it so here is a
 reference.
 
-* "mep" == member of the European Parliament
-* "mp" == member of the Parliament, here it's deputies of the French national assemble
+* "mep" == Member of the European Parliament
+* "mp" == Member of the Parliament, here it's deputies of the French national assemble
 
 Licence
 =======
 
-The Political is licenced under aGPLv3+. The original idea is from [gibus](http://gibus.sedrati-dinet.net/).
+The Political is licenced under AGPLv3+. The original idea is from [gibus](http://gibus.sedrati-dinet.net/).
