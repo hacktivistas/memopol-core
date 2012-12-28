@@ -1,7 +1,7 @@
 
 # import spanish reps data
 #
-# TODO: everythin!
+# TODO: everything!
 # Create party, regions, parlamentary group, handle the picture well, minor data issues like \r and other chars, etc
 
 import urllib2
@@ -9,25 +9,31 @@ import json
 import unicodedata
 
 from django.core.management.base import BaseCommand
+from django.db.utils import IntegrityError
 
-from es.parliament.models import ESParlamentary
+from memopol.es.parliament.models import ESParlamentary
 
 
 class Command(BaseCommand):
-    help = 'Import Spain representative data from congreso.es using the scraper wiki script https://scraperwiki.com/scrapers/congreso_datos_diputado/ '
+    help = 'Import Spain representatives data from congreso.es using the scraper wiki script https://scraperwiki.com/scrapers/congreso_datos_diputado/ '
 
     def handle(self, *args, **options):
         print 'Starting import'
         sw_url = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=json&name=congreso_datos_diputado&query=select+*+from+%60swdata%60&apikey="
         json_data = json.loads(urllib2.urlopen(sw_url).read())
-        for rep in json_data:
+        total = len(json_data)
+        for i, rep in enumerate(json_data):
+            print '%d/%d:' %(i+1, total)
             self.create_spain_rep(rep)
 
     def download_picture(self, pk, url):
-	filename = 'es/parliament/medias/img/esparlamentary/' + str(pk) + '.jpg'
+        filename = 'memopol/es/parliament/medias/img/esparlamentary/' + str(pk) + '.jpg'
         try:
             fh = open(filename)
+            fh.close()
 	except IOError:
+            print '  Couldn\'t find %s' %filename
+            print '  It\'s being downloaded from %s' %url
             img = urllib2.urlopen(url)
             output = open(filename,'wb')
             output.write(img.read())
@@ -37,7 +43,7 @@ class Command(BaseCommand):
         return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
 
     def create_spain_rep(self, item):
-	# FIXME: id in the URL
+        # FIXME: id in the URL
         rep_id = self.to_ascii(item["nombre"].strip().replace(' ','')+item["apellidos"].strip().replace(' ',''))
         representative = {
             "picture": item["url_foto"],
@@ -65,12 +71,15 @@ class Command(BaseCommand):
             "ce_twitter": item["twitter"],
             "ce_facebook_url": item["facebook_url"],
             "ce_web": item["web"],
-            "ce_flikr_url": item["flickr_url"],
+            "ce_flickr_url": item["flickr_url"],
             "ce_linkedin_url": item["linkedin_url"],
         }
-        print representative
-        rep = ESParlamentary.objects.get_or_create(id=item["id"], defaults=representative)
-	self.download_picture(item["id"], item["url_foto"])
+        print 'Importing data for', representative['full_name']
+        try:
+            rep = ESParlamentary.objects.get_or_create(id=item["id"], defaults=representative)
+        except IntegrityError:
+            print '  A parlamentary with id %d already exists. Skipping...' %item["id"]
+        self.download_picture(item["id"], item["url_foto"])
 
 
 # PARTY!!!

@@ -51,7 +51,7 @@ urlpatterns = patterns('',  # pylint: disable=C0103
     url(r'^about/$', views.about, name='about'),
     url(r'^api/$', direct_to_template, {'template': 'api.html', 'extra_context': {"root_url": settings.ROOT_URL}}, name='api_doc'),
     url(r'^europe/parliament/', include('memopol.meps.urls', namespace='meps', app_name='meps')),
-    url(r'^spain/parliament/', include('es.parliament.urls', namespace='espar', app_name='espar')),
+    url(r'^spain/parliament/', include('memopol.es.parliament.urls', namespace='espar', app_name='espar')),
     url(r'^france/assemblee/', include('memopol.mps.urls', namespace='mps', app_name='mps')),
     url(r'^votes/', include('memopol.votes.urls', namespace='votes', app_name='votes')),
     url(r'^patches/', include('memopol.patch_o_maton.urls', namespace='patch_o_maton', app_name='patch_o_maton')),

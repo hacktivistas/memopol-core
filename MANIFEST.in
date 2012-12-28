@@ -8,3 +8,4 @@ recursive-include memopol/reps/templates *
 recursive-include memopol/votes/templates *
 recursive-include memopol/patch_o_maton/templates *
 recursive-include memopol/search/templates *
+recursive-include memopol/es/templates *

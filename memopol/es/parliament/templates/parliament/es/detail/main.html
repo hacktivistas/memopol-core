@@ -15,7 +15,7 @@
 
 <div class="twelve columns panel">
     <div class="two columns">
-        <img width="100px" src="{# url meps:mep-picture mep.ep_id #}">
+        <img width="100px" src="{% url espar:esp-picture esparlamentary.ce_id %}">
     </div>
 
     <div class="seven columns">
@@ -23,6 +23,7 @@
 
         <div class="row">
             <p>{{ mep.group_tag|safe }}</p>
+            {{ esparlamentary.ce_partido }} {{ esparlamentary.ce_cargo }} {{ esparlamentary.ce_circunscripcion }}
         </div>
     </div>
     <div class="three columns">

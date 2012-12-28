@@ -1,0 +1,7 @@
+{% if esparlamentary.ce_curriculum %}
+    <ul>
+        {{ esparlamentary.ce_curriculum }}
+    </ul>
+{% else %}
+    <p>{% trans "No CV available." %}</p>
+{% endif %}

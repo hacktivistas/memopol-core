@@ -57,7 +57,7 @@ INSTALLED_APPS = (
     'snippets',
     'extended_choices',
     'matplotlib',
-    'es.parliament',
+    'memopol.es.parliament',
 )
 STATICFILES_FINDERS += (
     "compressor.finders.CompressorFinder",
