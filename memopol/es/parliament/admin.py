@@ -19,6 +19,6 @@ class Comission(admin.ModelAdmin):
     model = models.Comission
 
 admin.site.register(models.ESParlamentary, ESParlamentaryAdmin)
-admin.site.register(models.Circunscritcion, Circunscription)
+admin.site.register(models.Circunscription, Circunscription)
 admin.site.register(models.Party, Party)
 admin.site.register(models.Comission, Comission)
